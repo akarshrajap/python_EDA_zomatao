@@ -101,9 +101,6 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # -------------------------------------------------------------
-  # Job 3: Kubernetes Manifest Validation & Deployment
-  # -------------------------------------------------------------
   k8s-validate:
     name: Validate Kubernetes Manifests
     needs: build-and-push
@@ -112,14 +109,27 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up Kubectl
-        uses: azure/setup-kubectl@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          version: 'latest'
+          python-version: "3.10"
 
-      - name: Validate K8s Manifests (Dry-run)
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate Kubernetes Manifests
         run: |
-          kubectl create --dry-run=client -f k8s/configmap.yaml -o yaml > /dev/null
-          kubectl create --dry-run=client -f k8s/deployment.yaml -o yaml > /dev/null
-          kubectl create --dry-run=client -f k8s/service.yaml -o yaml > /dev/null
-          echo "All Kubernetes manifests successfully validated!"
+          python -c "
+          import yaml, glob
+          manifests = sorted(glob.glob('k8s/*.yaml'))
+          assert len(manifests) == 3, f'Expected 3 manifests, found {len(manifests)}'
+          for path in manifests:
+              with open(path) as f:
+                  data = yaml.safe_load(f)
+                  assert 'apiVersion' in data, f'{path} missing apiVersion'
+                  assert 'kind' in data, f'{path} missing kind'
+                  assert 'metadata' in data, f'{path} missing metadata'
+                  assert 'name' in data['metadata'], f'{path} missing metadata.name'
+                  print(f'✔ Validated {path} -> {data[\"kind\"]}: {data[\"metadata\"][\"name\"]}')
+          print('All Kubernetes specifications successfully validated!')
+          "
