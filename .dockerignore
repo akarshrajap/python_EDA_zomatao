@@ -1,0 +1,17 @@
+# Docker ignore list
+.git
+.github
+.gitignore
+.dockerignore
+zomato.csv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.idea
+.vscode
+*.md

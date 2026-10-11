@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telemetry-dashboard-config
+  labels:
+    app: telemetry-dashboard
+    tier: frontend
+data:
+  PORT: "8501"
+  STREAMLIT_SERVER_HEADLESS: "true"
+  STREAMLIT_BROWSER_GATHER_USAGE_STATS: "false"
+  STREAMLIT_SERVER_ENABLE_CORS: "false"
+  DATA_PATH: "/app/data/telemetry_data.csv"
+  APP_ENV: "production"
+  APP_TITLE: "Zomato Bangalore Data Telemetry Dashboard"
