@@ -119,7 +119,7 @@ jobs:
 
       - name: Validate K8s Manifests (Dry-run)
         run: |
-          kubectl apply --dry-run=client -f k8s/configmap.yaml
-          kubectl apply --dry-run=client -f k8s/deployment.yaml
-          kubectl apply --dry-run=client -f k8s/service.yaml
+          kubectl create --dry-run=client -f k8s/configmap.yaml -o yaml > /dev/null
+          kubectl create --dry-run=client -f k8s/deployment.yaml -o yaml > /dev/null
+          kubectl create --dry-run=client -f k8s/service.yaml -o yaml > /dev/null
           echo "All Kubernetes manifests successfully validated!"
