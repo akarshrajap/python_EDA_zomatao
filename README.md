@@ -215,7 +215,7 @@ pip install -r requirements.txt
 # 2. Launch the Streamlit dashboard
 streamlit run app.py
 ```
-Visit `http://localhost:8501` in your browser.
+Visit `http://localhost:8501` in your browser.2
 
 ---
 
@@ -228,7 +228,7 @@ docker build -t data-telemetry-dashboard:latest .
 docker run -d -p 8501:8501 --name telemetry-app data-telemetry-dashboard:latest
 
 # 3. Check health probe status
-curl -f http://localhost:8501/_stcore/health
+curl.exe -f http://localhost:8501/_stcore/health
 ```
 
 ---
